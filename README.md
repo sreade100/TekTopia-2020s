@@ -55,9 +55,10 @@
 
 4. **Add Capability for Multiple Stores**  
    - Villagers use the closest store first.
+   - Alternative: Buildings can contain a local storage that is filled first
 
 5. **Add an Infinite Bed Option**  
-   - Add  very expensive unlimited beds option (if technically feasible).
+   - Add a very expensive unlimited beds option (if technically feasible).
 
 ### Explore:
 
@@ -75,3 +76,7 @@
 16. **Add animal petting for happiness?**
 17. **Custom Bard Music**
 18. **Town Bell for Warning of Attacks. i.e. trigger guard action, trigger villager retreat to town hall/nearest building**
+19. **Add Achievements**
+20. **Captain of the Guard**
+   - Guard movements become more synchronised in patrol and in attacks
+   - Training increases skills faster
