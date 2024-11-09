@@ -63,17 +63,15 @@
 
 6. **Crop Signage**  
    - Instead of planting to indicate what you want there, use fences and signs.
-
 7. **Multiple Floor Levels for buildings**
-
 8. **Ladder Climbing Capability**
-
 9. **Escape from Water Capability**
-
 10. **Use of Lava Pit as Rubbish Disposal**
-
 11. **Domestic Animal Interactions for Children**
-
 12. **City hall upgrade i.e., greater boundaries**
-
 13. **Prioritise using roads/paths over crossing grass etc.**
+14. **Add ability to allocate bed to individuals/certain workers**
+15. **Constrain Golems**
+16. **Add animal petting for happiness?**
+17. **Custom Bard Music**
+18. **Town Bell for Warning of Attacks. i.e. trigger guard action, trigger villager retreat to town hall/nearest building**
