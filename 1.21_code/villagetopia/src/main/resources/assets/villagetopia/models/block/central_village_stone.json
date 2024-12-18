@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "up": "villagetopia:block/central_village_stone_top",
+    "down": "minecraft:chiseled_stone_brick",
+    "north": "minecraft:chiseled_stone_brick",
+    "south": "minecraft:chiseled_stone_brick",
+    "east": "minecraft:chiseled_stone_brick",
+    "west": "minecraft:chiseled_stone_brick"
+  }
+}

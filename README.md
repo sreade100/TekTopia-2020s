@@ -80,3 +80,8 @@
 20. **Captain of the Guard**
    - Guard movements become more synchronised in patrol and in attacks
    - Training increases skills faster
+20. **Tradesman prices = 0 Emeralds when there is a teacher and someone of that trade**
+21. **Check that Ranchers look after all animals. Check out not being fed deaths, is that really something needed**
+21. **Fix Trading Depreciation**
+   - Peaceful, Survival and Hardcore Matching
+21. **Add all trees to harvest**
