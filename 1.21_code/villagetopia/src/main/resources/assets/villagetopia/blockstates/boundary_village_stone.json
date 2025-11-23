@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "villagetopia:block/central_village_stone"
+      "model": "villagetopia:block/boundary_village_stone"
     }
   }
 }

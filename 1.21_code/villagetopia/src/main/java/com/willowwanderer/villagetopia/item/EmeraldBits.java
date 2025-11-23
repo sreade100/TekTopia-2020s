@@ -1,4 +1,4 @@
-package com.willowwanderer.villagetopia.item.emeraldbits;
+package com.willowwanderer.villagetopia.item;
 
 import com.willowwanderer.villagetopia.Villagetopia;
 import net.minecraft.world.item.Item;

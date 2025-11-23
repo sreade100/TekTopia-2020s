@@ -1,7 +1,8 @@
-package com.willowwanderer.villagetopia.block.villagestone;
+package com.willowwanderer.villagetopia.block;
 
 import com.willowwanderer.villagetopia.Villagetopia;
-import com.willowwanderer.villagetopia.item.villagestone.VillageStoneItem;
+import com.willowwanderer.villagetopia.block.centralvillagestone.CentralVillageStone;
+import com.willowwanderer.villagetopia.item.VillageStoneItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -10,6 +11,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.neoforged.bus.api.IEventBus;
 import net.neoforged.neoforge.registries.DeferredBlock;
 import net.neoforged.neoforge.registries.DeferredRegister;
+import static net.minecraft.world.level.block.Blocks.CRAFTING_TABLE;
 
 import java.util.function.Supplier;
 
@@ -18,8 +20,7 @@ public class VillageStone {
             DeferredRegister.createBlocks(Villagetopia.MOD_ID);
 
     public static final DeferredBlock<Block> CENTRAL_VILLAGE_STONE = registerBlock("central_village_stone",
-            () -> new Block(BlockBehaviour.Properties.of()
-                    .explosionResistance(10f).instabreak().sound(SoundType.STONE)));
+            () -> new CentralVillageStone(BlockBehaviour.Properties.ofFullCopy(CRAFTING_TABLE)));
 
     public static final DeferredBlock<Block> BOUNDARY_VILLAGE_STONE = registerBlock("boundary_village_stone",
             () -> new Block(BlockBehaviour.Properties.of()

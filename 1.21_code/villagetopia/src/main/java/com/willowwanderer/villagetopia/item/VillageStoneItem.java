@@ -1,4 +1,4 @@
-package com.willowwanderer.villagetopia.item.villagestone;
+package com.willowwanderer.villagetopia.item;
 
 import com.willowwanderer.villagetopia.Villagetopia;
 import net.neoforged.bus.api.IEventBus;

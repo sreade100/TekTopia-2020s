@@ -1,4 +1,6 @@
 {
   "item.villagetopia.emerald_bits": "Emerald Bit",
-  "block.villagetopia.central_village_stone": "Central Village Stone"
+  "block.villagetopia.central_village_stone": "Central Village Stone",
+  "block.villagetopia.boundary_village_stone": "Boundary Village Stone",
+  "container.villagetopia": "Villagetopia"
 }
