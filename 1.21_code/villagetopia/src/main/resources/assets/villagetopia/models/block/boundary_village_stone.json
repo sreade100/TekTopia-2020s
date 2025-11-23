@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/cube_bottom_top",
+  "textures": {
+    "top": "villagetopia:block/central_village_stone_up",
+    "side": "villagetopia:block/chiseled_stone",
+    "bottom": "villagetopia:block/central_village_stone_up"
+  }
+}

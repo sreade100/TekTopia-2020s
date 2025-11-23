@@ -21,6 +21,10 @@ public class VillageStone {
             () -> new Block(BlockBehaviour.Properties.of()
                     .explosionResistance(10f).instabreak().sound(SoundType.STONE)));
 
+    public static final DeferredBlock<Block> BOUNDARY_VILLAGE_STONE = registerBlock("boundary_village_stone",
+            () -> new Block(BlockBehaviour.Properties.of()
+                    .explosionResistance(10f).instabreak().sound(SoundType.STONE)));
+
     private static <T extends Block> DeferredBlock<T> registerBlock(String name, Supplier<T> block){
         DeferredBlock<T> toReturn = BLOCKS.register(name,block);
         registerBlockItem(name,toReturn);

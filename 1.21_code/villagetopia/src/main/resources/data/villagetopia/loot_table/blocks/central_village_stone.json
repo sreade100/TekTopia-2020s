@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:block",
+  "pools": [
+    {
+      "bonus_rolls": 0.0,
+      "conditions": [
+        {
+          "condition": "minecraft:survives_explosion"
+        }
+      ],
+      "entries": [
+        {
+          "type": "minecraft:item",
+          "name": "villagetopia:central_village_stone"
+        }
+      ],
+      "rolls": 1.0
+    }
+  ],
+  "random_sequence": "villagetopia:blocks/central_village_stone"
+}
