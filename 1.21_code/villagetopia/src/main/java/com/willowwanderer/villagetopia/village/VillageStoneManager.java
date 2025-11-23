@@ -1,53 +1,69 @@
 package com.willowwanderer.villagetopia.village;
 
-import com.willowwanderer.villagetopia.village.Visitor;
+import com.willowwanderer.villagetopia.entity.Visitor;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.phys.AABB;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
+
 
 public class VillageStoneManager {
 
-    private final List<BlockPos> villageStones = new ArrayList<>();
+    private final VillageData data; // persistent data
     private final Random random = new Random();
+    private float spawnChance = 0.0001f;
+    private int radius = 20;
 
-    // Keep a list of visitors
-    private final List<Visitor> visitors = new ArrayList<>();
-    
+    public VillageStoneManager(VillageData data, ServerLevel level) {
+        this.data = data;
+    }
+
+    // -----------------------------
+    // Stone management
+    // -----------------------------
     public void addStone(BlockPos pos) {
-        if (!villageStones.contains(pos)) {
-            villageStones.add(pos);
+        if (!data.getVillageStones().contains(pos)) {
+            data.getVillageStones().add(pos);
+            data.markDirty();
         }
     }
 
     public void removeStone(BlockPos pos) {
-        villageStones.remove(pos);
+        if (data.getVillageStones().remove(pos)) {
+            data.markDirty();
+        }
     }
 
+    // -----------------------------
+    // Tick method
+    // -----------------------------
     public void tick(Level level) {
 
-        for (Visitor visitor : visitors){
-            visitor.update(level.getDayTime());
-        }
+        if (level.isClientSide() || data.getVillageStones().isEmpty() ||
+                (level.getDayTime() % 24000L) > 12000L) return;
 
-        if (level.isClientSide() || villageStones.isEmpty() || (level.getDayTime() % 24000L) > 12000L) return;
-
-        float spawnChance = 0.001f; // per stone per tick
-        int radius = 3;
-
-        for (BlockPos stonePos : villageStones) {
+        // Spawn villagers near each stone
+        for (BlockPos stonePos : data.getVillageStones()) {
             if (random.nextFloat() < spawnChance) {
                 spawnVillager(level, stonePos, radius);
             }
         }
     }
 
+    // -----------------------------
+    // Spawn a vistor villager near a stone
+    // -----------------------------
     private void spawnVillager(Level level, BlockPos stonePos, int radius) {
         Villager villager = EntityType.VILLAGER.create(level);
         if (villager == null) return;
@@ -59,7 +75,19 @@ public class VillageStoneManager {
         villager.moveTo(dx, dy + 1, dz, level.random.nextFloat() * 360F, 0);
         level.addFreshEntity(villager);
 
-        Visitor visitor = new Visitor(villager);
-        visitors.add(visitor);
+        Visitor visitor = new Visitor(EntityType.VILLAGER,level,"TRADE");
+        Random random = new Random();
+
+        float stayLikelihood;
+        if (random.nextFloat() < 0.1f) {
+            // 10% chance to be high
+            stayLikelihood = 0.5f + random.nextFloat() * 0.5f; // 0.5 to 1.0
+        } else {
+            // 90% chance to be low
+            stayLikelihood = random.nextFloat() * 0.2f; // 0.0 to 0.2
+        }
+
+        visitor.setStayLikelihood(stayLikelihood);
     }
+
 }
