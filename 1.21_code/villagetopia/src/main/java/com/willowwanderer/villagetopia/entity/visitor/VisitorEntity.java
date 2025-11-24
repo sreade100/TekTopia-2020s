@@ -1,23 +1,33 @@
-package com.willowwanderer.villagetopia.entity;
+package com.willowwanderer.villagetopia.entity.visitor;
 
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
+import net.minecraft.world.entity.npc.VillagerType;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.level.Level;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.entity.ai.attributes.Attributes;
 
-public class Visitor extends Villager {
+
+public class VisitorEntity extends Villager {
 
     private String purpose = "NONE";
     private float stayLikelihood = 0f;
 
     // Constructor
-    public Visitor(EntityType<? extends Villager> entityType, Level level,String purpose) {
-        super(entityType, level);
-        this.purpose = purpose;
-        setVisitorAppearance();
+    public VisitorEntity(EntityType<? extends Villager> entityType, Level level) {
+        super(entityType, level,VillagerType.TAIGA);
+        this.purpose = "NONE"; // default
+    }
+    
+    public static AttributeSupplier.Builder createAttributes() {
+        return Villager.createAttributes()  // start with default villager attributes
+                .add(Attributes.MAX_HEALTH, 20.0D)       // set max health
+                .add(Attributes.MOVEMENT_SPEED, 0.5D);   // set movement speed
     }
 
     // -------------------------------
@@ -46,6 +56,7 @@ public class Visitor extends Villager {
 
     public void setPurpose(String purpose) {
         this.purpose = purpose;
+        setVisitorAppearance(purpose);
     }
 
     public float getStayLikelihood() {
@@ -57,21 +68,21 @@ public class Visitor extends Villager {
     }
 
     // -------------------------------
-    // Visitor logic
+    // VisitorEntity logic
     // -------------------------------
     /**
      * Returns true for normal visitors; false if purpose is "OneNight"
      */
     public boolean oneNight() {
-        return !"ONENIGHT".equals(this.purpose);
+        return "ONENIGHT".equals(this.purpose);
     }
 
     // -------------------------------
     // Trader-like appearance
     // -------------------------------
-    private void setVisitorAppearance() {
+    private void setVisitorAppearance(String purpose) {
         // Pick a random basic profession
-        VillagerProfession profession = pickRandomProfession();
+        VillagerProfession profession = getProfession(purpose); //pickRandomProfession();
 
         // Directly create a new VillagerData (since withProfession() doesn’t exist)
         VillagerData newData = new VillagerData(
@@ -80,7 +91,36 @@ public class Visitor extends Villager {
                 2                                  // level 2 for slightly experienced look
         );
         this.setVillagerData(newData);
+        
+        if (!this.level().isClientSide && this.level() instanceof ServerLevel serverLevel) {
+            // serverLevel is your ServerLevel instance
+            this.refreshBrain(serverLevel);
+        }
+
+        if (!this.level().isClientSide()) {
+            this.level().broadcastEntityEvent(this, (byte) 16); 
+        }
+        
     } 
+
+    private VillagerProfession getProfession(String purpose) {
+        switch (purpose.toUpperCase()) {
+            case "TRADE":
+                return VillagerProfession.FARMER;          // placeholder for trader type
+            case "EXPLORE":
+                return VillagerProfession.FLETCHER;        // placeholder for explorer type
+            case "SOCIALISE":
+                return VillagerProfession.SHEPHERD;        // placeholder for social type
+            case "ONENIGHT":
+                return VillagerProfession.LEATHERWORKER;   // placeholder for temporary visitor type
+            case "THIEF":
+                return VillagerProfession.TOOLSMITH;       // placeholder for stealth/rogue type
+            case "MURDER":
+                return VillagerProfession.WEAPONSMITH;     // placeholder for aggressive type
+            default:
+                return VillagerProfession.NITWIT;          // fallback/default
+        }
+    }
 
     private VillagerProfession pickRandomProfession() {
         VillagerProfession[] professions = new VillagerProfession[] {

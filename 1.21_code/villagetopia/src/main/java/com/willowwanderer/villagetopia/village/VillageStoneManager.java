@@ -1,7 +1,5 @@
 package com.willowwanderer.villagetopia.village;
 
-import com.willowwanderer.villagetopia.entity.Visitor;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -16,6 +14,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
+
+import com.willowwanderer.villagetopia.entity.visitor.VisitorEntity;
 
 
 public class VillageStoneManager {
@@ -56,26 +56,27 @@ public class VillageStoneManager {
         // Spawn villagers near each stone
         for (BlockPos stonePos : data.getVillageStones()) {
             if (random.nextFloat() < spawnChance) {
-                spawnVillager(level, stonePos, radius);
+                spawnVisitor(level, stonePos, radius);
             }
         }
     }
 
     // -----------------------------
-    // Spawn a vistor villager near a stone
+    // Spawn a vistor visitor near a stone
     // -----------------------------
-    private void spawnVillager(Level level, BlockPos stonePos, int radius) {
-        Villager villager = EntityType.VILLAGER.create(level);
-        if (villager == null) return;
+    private void spawnVisitor(Level level, BlockPos stonePos, int radius) {
+        VisitorEntity visitor = new VisitorEntity(EntityType.VILLAGER,level);
+        if (visitor == null) return;
 
         double dx = stonePos.getX() + (random.nextDouble() * (radius * 2 + 1) - radius) + 0.5;
         double dz = stonePos.getZ() + (random.nextDouble() * (radius * 2 + 1) - radius) + 0.5;
         int dy = level.getHeight(Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, (int) dx, (int) dz);
 
-        villager.moveTo(dx, dy + 1, dz, level.random.nextFloat() * 360F, 0);
-        level.addFreshEntity(villager);
+        visitor.moveTo(dx, dy + 1, dz, level.random.nextFloat() * 360F, 0);
+        level.addFreshEntity(visitor);
 
-        Visitor visitor = new Visitor(EntityType.VILLAGER,level,"TRADE");
+
+        visitor.setPurpose("TRADE");
         Random random = new Random();
 
         float stayLikelihood;
@@ -89,5 +90,6 @@ public class VillageStoneManager {
 
         visitor.setStayLikelihood(stayLikelihood);
     }
+
 
 }
