@@ -4,11 +4,22 @@ import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
 import net.minecraft.world.entity.npc.VillagerType;
+import net.minecraft.world.entity.schedule.Activity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.Brain;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.level.Level;
+
+import net.minecraft.world.entity.ai.behavior.SleepInBed;
+
+import com.mojang.serialization.Dynamic;
+import com.willowwanderer.villagetopia.entity.visitor.goals.DespawnAtSunsetGoal;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.syncher.EntityDataAccessor;
+import net.minecraft.network.syncher.EntityDataSerializers;
+import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
@@ -20,8 +31,23 @@ public class VisitorEntity extends Villager {
 
     // Constructor
     public VisitorEntity(EntityType<? extends Villager> entityType, Level level) {
-        super(entityType, level,VillagerType.TAIGA);
+        super(entityType, level,VillagerType.DESERT);
         this.purpose = "NONE"; // default
+    }
+
+    @Override
+    protected Brain<?> makeBrain(Dynamic<?> dynamic) {
+        Brain<Villager> brain = this.brainProvider().makeBrain(dynamic);
+
+        //brain.activi
+        brain.removeAllBehaviors();
+        return brain;
+    }
+
+    @Override
+    protected void registerGoals() {
+        this.goalSelector.addGoal(0, new DespawnAtSunsetGoal(this));
+        //super.registerGoals();
     }
     
     public static AttributeSupplier.Builder createAttributes() {
@@ -56,7 +82,7 @@ public class VisitorEntity extends Villager {
 
     public void setPurpose(String purpose) {
         this.purpose = purpose;
-        setVisitorAppearance(purpose);
+        setVisitorProfession(purpose);
     }
 
     public float getStayLikelihood() {
@@ -80,7 +106,7 @@ public class VisitorEntity extends Villager {
     // -------------------------------
     // Trader-like appearance
     // -------------------------------
-    private void setVisitorAppearance(String purpose) {
+    private void setVisitorProfession(String purpose) {
         // Pick a random basic profession
         VillagerProfession profession = getProfession(purpose); //pickRandomProfession();
 

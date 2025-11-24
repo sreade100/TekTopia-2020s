@@ -1,6 +1,7 @@
 package com.willowwanderer.villagetopia;
 
 import com.willowwanderer.villagetopia.block.VillageStone;
+import com.willowwanderer.villagetopia.entity.ModEntities;
 import com.willowwanderer.villagetopia.item.EmeraldBits;
 import com.willowwanderer.villagetopia.item.VillageStoneItem;
 
@@ -42,6 +43,7 @@ public class Villagetopia
         EmeraldBits.register(modEventBus);
         VillageStone.register(modEventBus);
         VillageStoneItem.register(modEventBus);
+        ModEntities.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 
