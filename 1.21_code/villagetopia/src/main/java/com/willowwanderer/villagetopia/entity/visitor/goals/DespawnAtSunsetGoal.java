@@ -19,7 +19,7 @@ public class DespawnAtSunsetGoal extends Goal {
     public boolean canUse() {
         // Only run on server, and only for one-night visitors
         if (visitor.level().isClientSide) return false;
-        if (!visitor.oneNight()) return false;
+        if (visitor.oneNight()) return false;
 
         long time = visitor.level().getDayTime() % 24000;
         // Active during sunset->night

@@ -39,15 +39,13 @@ public class VisitorEntity extends Villager {
     protected Brain<?> makeBrain(Dynamic<?> dynamic) {
         Brain<Villager> brain = this.brainProvider().makeBrain(dynamic);
 
-        //brain.activi
-        brain.removeAllBehaviors();
         return brain;
     }
 
     @Override
     protected void registerGoals() {
-        this.goalSelector.addGoal(0, new DespawnAtSunsetGoal(this));
-        //super.registerGoals();
+        //this.goalSelector.addGoal(0, new DespawnAtSunsetGoal(this));
+        super.registerGoals();
     }
     
     public static AttributeSupplier.Builder createAttributes() {
@@ -160,5 +158,18 @@ public class VisitorEntity extends Villager {
         };
         int index = this.random.nextInt(professions.length);
         return professions[index];
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.level().isClientSide) return;
+        if (this.oneNight()) return;
+
+        long time = this.level().getDayTime() % 24000;
+        if (time >= 12000) {
+            this.discard();
+        }
     }
 }
