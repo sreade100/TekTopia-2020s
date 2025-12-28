@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.behavior.SleepInBed;
 
 import com.mojang.serialization.Dynamic;
 import com.willowwanderer.villagetopia.entity.visitor.goals.DespawnAtSunsetGoal;
+import com.willowwanderer.villagetopia.village.VillageData;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -78,6 +79,41 @@ public class VisitorEntity extends Villager {
         return purpose;
     }
 
+    public String getRandomPurpose(VillageData data){
+        int total =
+        data.trade +
+        data.explore +
+        data.socialise +
+        data.thief +
+        data.murder;
+
+        // Safety fallback
+        if (total <= 0) {
+            return "TRADE";
+        }
+
+        int roll = this.random.nextInt(total);
+
+        if ((roll -= data.trade) < 0) {
+            return "TRADE";
+        }
+        if ((roll -= data.explore) < 0) {
+            return "EXPLORE";
+        }
+        if ((roll -= data.socialise) < 0) {
+            return "SOCIALISE";
+        }
+        if ((roll -= data.thief) < 0) {
+            return "THIEF";
+        }
+
+        return "MURDER";
+    }
+
+    public void setPurpose(VillageData data) {
+        setPurpose(getRandomPurpose(data));
+    }
+
     public void setPurpose(String purpose) {
         this.purpose = purpose;
         setVisitorProfession(purpose);
@@ -98,7 +134,7 @@ public class VisitorEntity extends Villager {
      * Returns true for normal visitors; false if purpose is "OneNight"
      */
     public boolean oneNight() {
-        return "ONENIGHT".equals(this.purpose);
+        return "ONENIGHT".equals(this.purpose.toUpperCase());
     }
 
     // -------------------------------

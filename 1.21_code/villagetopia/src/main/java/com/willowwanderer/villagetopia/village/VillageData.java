@@ -18,9 +18,22 @@ import java.util.UUID;
 public class VillageData extends SavedData {
 
     private final List<BlockPos> villageStones = new ArrayList<>();
+    // set probablities of visitor spawning
+    public int trade;
+    public int explore;
+    public int socialise;
+    public int thief;
+    public int murder;
 
     public VillageData() {
         super();
+        
+        // Default weights (can be tuned later)
+        this.trade = 40;
+        this.explore = 20;
+        this.socialise = 15;
+        this.thief = 15;
+        this.murder = 10;
     }
 
     // -----------------------------
@@ -49,6 +62,14 @@ public class VillageData extends SavedData {
         }
         tag.put("VillageStones", stoneList);
 
+        
+        // Visitor probabilities
+        tag.putInt("TradeWeight", trade);
+        tag.putInt("ExploreWeight", explore);
+        tag.putInt("SocialiseWeight", socialise);
+        tag.putInt("ThiefWeight", thief);
+        tag.putInt("MurderWeight", murder);
+
         return tag;
     }
 
@@ -60,6 +81,15 @@ public class VillageData extends SavedData {
             long posLong = ((LongTag) stoneList.get(i)).getAsLong();
             data.villageStones.add(BlockPos.of(posLong));
         }
+
+        
+        // Visitor probabilities (with safe defaults)
+        data.trade = tag.contains("TradeWeight") ? tag.getInt("TradeWeight") : data.trade;
+        data.explore = tag.contains("ExploreWeight") ? tag.getInt("ExploreWeight") : data.explore;
+        data.socialise = tag.contains("SocialiseWeight") ? tag.getInt("SocialiseWeight") : data.socialise;
+        data.thief = tag.contains("ThiefWeight") ? tag.getInt("ThiefWeight") : data.thief;
+        data.murder = tag.contains("MurderWeight") ? tag.getInt("MurderWeight") : data.murder;
+
         return data;
     }
 
@@ -82,6 +112,14 @@ public class VillageData extends SavedData {
         for (BlockPos pos : villageStones) {
             System.out.println("    Stone at: " + pos);
         }
+
+        
+        System.out.println("  Visitor Weights:");
+        System.out.println("    trade=" + trade);
+        System.out.println("    explore=" + explore);
+        System.out.println("    socialise=" + socialise);
+        System.out.println("    thief=" + thief);
+        System.out.println("    murder=" + murder);
     }
 
 }

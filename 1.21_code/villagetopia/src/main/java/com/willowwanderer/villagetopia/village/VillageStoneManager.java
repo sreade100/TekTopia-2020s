@@ -28,6 +28,7 @@ public class VillageStoneManager {
     private float spawnChance = 0.0001f;
     private int radius = 20;
 
+
     public VillageStoneManager(VillageData data, ServerLevel level) {
         this.data = data;
     }
@@ -98,7 +99,7 @@ public class VillageStoneManager {
             level.addFreshEntity(visitor);
 
             // Assign a purpose
-            visitor.setPurpose("TRADE");
+            visitor.setPurpose(data);
 
             // Assign stay likelihood
             Random random = new Random();
