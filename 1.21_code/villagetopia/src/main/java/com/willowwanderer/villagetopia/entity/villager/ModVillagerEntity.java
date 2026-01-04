@@ -1,4 +1,4 @@
-package com.willowwanderer.villagetopia.entity.visitor;
+package com.willowwanderer.villagetopia.entity.villager;
 
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
@@ -25,32 +25,66 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 
 /**
- * Visitor Behaviour:
- * Trader: Will only trade with you or your village trader
- * Explorer: Will wander around village 
- * Socialiser: Will talk to villagers
- * Theif: Will steal from any chests
- * Murderer: Will kill if they can corner someone
+ * Villager Behaviour:
+ * Schedule (Non-guard Adult):
+ * 00010 Talk & Eat
+ * -> 02000 Work
+ * -> 09000 Talk & Eat
+ * -> 12000 Sleep
  * 
- * Explorer or socialiser will become Villager if:
- * There are enough beds (bool check)
- * There is food in chests (bool check)
- * Population is < 5 (bool check)
- * They talk to happy villagers (stayLikelihood)
+ * Schedule (Guard Adult):
+ * 00010 Talk & Eat
+ * -> 02000 Work
+ * -> 09000 Talk & Eat
+ * -> 12000 Sleep
  * 
- * Or will have "one night stand" if:
- * They talk to happy villagers
- * Not enough food and or beds (bool check)
+ * Schedule (Non-school Child)
+ * 00010 Talk & Eat
+ * -> 02000 Work
+ * -> 06000 Play
+ * -> 09000 Talk & Eat
+ * -> 10000 Play
+ * -> 11000 Sleep
+ * 
+ * Schedule (School Child)
+ * 00010 Talk & Eat
+ * -> 02000 School
+ * -> 09000 Talk & Eat
+ * -> 10000 Play
+ * -> 11000 Sleep
+ * 
+ * 
+ * 
+ * Automatic priority order of Jobs:
+ * Farmer: Fence with sign of hoe (bool) && No spare food
+ * 
+ * Custom job setting
+ * 
+ * Happiness gained from:
+ * Socialising with happy +
+ * Socialising with sad -
+ * Woohoo ++
+ * Music ++
+ * Good food +
+ * Very good food ++
+ * Get married +++
+ * Have kid +++
+ * Non-guard see murder --- 
+ * Non-guard see thief -
+ * Non-guard see mob --
+ * See murder ---
+ * Dead partner ---
+ * Dead child ---
  * 
  */
 
-public class VisitorEntity extends Villager {
+public class ModVillagerEntity extends Villager {
 
     private String purpose = "NONE";
     private float stayLikelihood = 0f;
 
     // Constructor
-    public VisitorEntity(EntityType<? extends Villager> entityType, Level level) {
+    public ModVillagerEntity(EntityType<? extends Villager> entityType, Level level) {
         super(entityType, level);
         this.purpose = "NONE"; // default
     }
