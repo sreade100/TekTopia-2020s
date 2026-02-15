@@ -80,13 +80,13 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 
 public class ModVillagerEntity extends Villager {
 
-    private String purpose = "NONE";
-    private float stayLikelihood = 0f;
+    private String job = "NONE";
+    private float happiness = 0f;
 
     // Constructor
     public ModVillagerEntity(EntityType<? extends Villager> entityType, Level level) {
         super(entityType, level);
-        this.purpose = "NONE"; // default
+        this.job = "NONE"; // default
     }
 
     @Override
@@ -114,25 +114,25 @@ public class ModVillagerEntity extends Villager {
     @Override
     public void addAdditionalSaveData(CompoundTag tag) {
         super.addAdditionalSaveData(tag);
-        tag.putString("Purpose", purpose);
-        tag.putFloat("StayLikelihood", stayLikelihood);
+        tag.putString("Job", job);
+        tag.putFloat("Happiness", happiness);
     }
 
     @Override
     public void readAdditionalSaveData(CompoundTag tag) {
         super.readAdditionalSaveData(tag);
-        this.purpose = tag.getString("Purpose");
-        this.stayLikelihood = tag.getFloat("StayLikelihood");
+        this.job = tag.getString("Job");
+        this.happiness = tag.getFloat("Happiness");
     }
 
     // -------------------------------
     // Getters / Setters
     // -------------------------------
-    public String getPurpose() {
-        return purpose;
+    public String getJob() {
+        return job;
     }
 
-    public String getRandomPurpose(VillageData data){
+    public String getRandomJob(VillageData data){
         int total =
         data.trade +
         data.explore +
@@ -163,39 +163,34 @@ public class ModVillagerEntity extends Villager {
         return "MURDER";
     }
 
-    public void setPurpose(VillageData data) {
-        setPurpose(getRandomPurpose(data));
+    public void setJob(VillageData data) {
+        setJob(getRandomJob(data));
     }
 
-    public void setPurpose(String purpose) {
-        this.purpose = purpose;
-        setVisitorProfession(purpose);
+    public void setJob(String job) {
+        this.job = job;
+        setVillagerProfession(job);
     }
 
-    public float getStayLikelihood() {
-        return stayLikelihood;
+    public float getHappiness() {
+        return happiness;
     }
 
-    public void setStayLikelihood(float stayLikelihood) {
-        this.stayLikelihood = stayLikelihood;
+    public void setHappiness(float happiness) {
+        this.happiness = happiness;
     }
 
     // -------------------------------
-    // VisitorEntity logic
+    // VillagerEntity logic
     // -------------------------------
-    /**
-     * Returns true for normal visitors; false if purpose is "OneNight"
-     */
-    public boolean oneNight() {
-        return "ONENIGHT".equals(this.purpose.toUpperCase());
-    }
+
 
     // -------------------------------
     // Trader-like appearance
     // -------------------------------
-    private void setVisitorProfession(String purpose) {
+    private void setVillagerProfession(String job) {
         // Pick a random basic profession
-        VillagerProfession profession = getProfession(purpose); //pickRandomProfession();
+        VillagerProfession profession = getProfession(job); //pickRandomProfession();
 
         // Directly create a new VillagerData (since withProfession() doesn’t exist)
         VillagerData newData = new VillagerData(
@@ -216,8 +211,8 @@ public class ModVillagerEntity extends Villager {
         
     } 
 
-    private VillagerProfession getProfession(String purpose) {
-        switch (purpose.toUpperCase()) {
+    private VillagerProfession getProfession(String job) {
+        switch (job.toUpperCase()) {
             case "TRADE":
                 return VillagerProfession.FARMER;          // placeholder for trader type
             case "EXPLORE":
@@ -254,11 +249,5 @@ public class ModVillagerEntity extends Villager {
         super.tick();
 
         if (this.level().isClientSide) return;
-        if (this.oneNight()) return;
-
-        long time = this.level().getDayTime() % 24000;
-        if (time >= 12000) {
-            this.discard();
-        }
     }
 }

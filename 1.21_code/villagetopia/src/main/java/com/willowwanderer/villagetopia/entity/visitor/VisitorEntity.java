@@ -15,6 +15,8 @@ import net.minecraft.world.entity.ai.behavior.SleepInBed;
 import com.mojang.serialization.Dynamic;
 import com.willowwanderer.villagetopia.entity.visitor.goals.DespawnAtSunsetGoal;
 import com.willowwanderer.villagetopia.village.VillageData;
+import com.willowwanderer.villagetopia.entity.ModEntities;
+import com.willowwanderer.villagetopia.entity.villager.ModVillagerEntity;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
@@ -215,14 +217,41 @@ public class VisitorEntity extends Villager {
         return professions[index];
     }
 
+    private void spawnModVillager(Level level) {
+        if (level.isClientSide) return;
+
+        // Spawn new mod villager
+        ModVillagerEntity newVillager =  new ModVillagerEntity(EntityType.VILLAGER, level);
+
+        // Place villager at current point
+        newVillager.moveTo(
+                this.getX(),
+                this.getY(),
+                this.getZ(),
+                this.getYRot(),
+                this.getXRot()
+        );
+
+        level.addFreshEntity(newVillager);
+        
+        // Remove current visitor
+        this.discard();
+    }
+
     @Override
     public void tick() {
         super.tick();
 
         if (this.level().isClientSide) return;
-        if (this.oneNight()) return;
 
         long time = this.level().getDayTime() % 24000;
+
+        if (this.oneNight()) {if (time >= 20000) this.discard(); return;};
+
+        if (this.stayLikelihood > 0.8f){
+            this.spawnModVillager(this.level());
+        }
+        
         if (time >= 12000) {
             this.discard();
         }

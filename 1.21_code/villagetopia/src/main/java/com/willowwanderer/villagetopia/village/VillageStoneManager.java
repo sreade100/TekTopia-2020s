@@ -113,6 +113,8 @@ public class VillageStoneManager {
 
             visitor.setStayLikelihood(stayLikelihood);
 
+            visitor.setPurpose("ONENIGHT");
+
             // Successfully spawned
             return;
         }
