@@ -1,5 +1,7 @@
 package com.willowwanderer.villagetopia.entity.villager;
 
+import java.util.List;
+
 import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.entity.npc.VillagerData;
 import net.minecraft.world.entity.npc.VillagerProfession;
@@ -16,13 +18,20 @@ import com.mojang.serialization.Dynamic;
 import com.willowwanderer.villagetopia.entity.visitor.goals.DespawnAtSunsetGoal;
 import com.willowwanderer.villagetopia.village.VillageData;
 
+import net.minecraft.nbt.Tag;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.StringTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+
+
 
 /**
  * Villager Behaviour:
@@ -81,12 +90,17 @@ import net.minecraft.world.entity.ai.attributes.Attributes;
 public class ModVillagerEntity extends Villager {
 
     private String job = "NONE";
+    private float hunger = 0f;
     private float happiness = 0f;
+    private String[] traits = new String[3];
 
     // Constructor
     public ModVillagerEntity(EntityType<? extends Villager> entityType, Level level) {
         super(entityType, level);
         this.job = "NONE"; // default
+        this.hunger = 10.000f; // start at maximum
+        this.happiness = 5.000f; // start in middle
+        this.traits = this.generateRandomTraits(); // generates random traits
     }
 
     @Override
@@ -116,6 +130,14 @@ public class ModVillagerEntity extends Villager {
         super.addAdditionalSaveData(tag);
         tag.putString("Job", job);
         tag.putFloat("Happiness", happiness);
+        tag.putFloat("Hunger", hunger);
+        ListTag traitList = new ListTag();
+
+        for (String trait : traits) {
+            traitList.add(StringTag.valueOf(trait));
+        }
+
+        tag.put("Traits", traitList);
     }
 
     @Override
@@ -123,6 +145,21 @@ public class ModVillagerEntity extends Villager {
         super.readAdditionalSaveData(tag);
         this.job = tag.getString("Job");
         this.happiness = tag.getFloat("Happiness");
+        this.hunger = tag.getFloat("Hunger");
+
+        if (tag.contains("Traits", Tag.TAG_LIST)) {
+
+            ListTag traitList = tag.getList("Traits", Tag.TAG_STRING);
+
+            this.traits = new String[traitList.size()];
+
+            for (int i = 0; i < traitList.size(); i++) {
+                this.traits[i] = traitList.getString(i);
+            }
+
+        } else {
+            this.traits = generateRandomTraits();
+        }
     }
 
     // -------------------------------
@@ -178,6 +215,48 @@ public class ModVillagerEntity extends Villager {
 
     public void setHappiness(float happiness) {
         this.happiness = happiness;
+    }
+
+    public float getHunger() {
+        return hunger;
+    }
+
+    public void setHunger(float hunger) {
+        this.hunger = hunger;
+    }
+
+    public String[] getTraits(){
+        return traits;
+    }
+
+    public String[] generateRandomTraits() {
+
+        String[] result = new String[3];
+
+        List<TraitDefinition> available = TraitDatabase.getTraits();
+
+        for (int i = 0; i < 3; i++) {
+
+            double totalWeight = 0;
+
+            for (TraitDefinition trait : available) {
+                totalWeight += trait.getWeight();
+            }
+
+            double random = Math.random() * totalWeight;
+
+            for (TraitDefinition trait : available) {
+
+                random -= trait.getWeight();
+
+                if (random <= 0) {
+                    result[i] = trait.getName();
+                    break;
+                }
+            }
+        }
+
+        return result;
     }
 
     // -------------------------------
@@ -249,5 +328,22 @@ public class ModVillagerEntity extends Villager {
         super.tick();
 
         if (this.level().isClientSide) return;
+
+        this.hunger = this.hunger - 0.000139f; // starve in three days after full
+
+        if (this.hunger < 0.0f){
+            if (this.getHealth() < 0.1f){
+                String message = this.getName() + " died of starvation";
+                broadcast(getServer(), message);
+            }
+            this.hurt(this.damageSources().starve(),1.0f);
+        }
+    }
+
+    public static void broadcast(MinecraftServer server, String message) {
+        server.getPlayerList().broadcastSystemMessage(
+                Component.literal(message),
+                false
+        );
     }
 }

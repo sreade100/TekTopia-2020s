@@ -1,0 +1,54 @@
+{
+  "traits": {
+    "MURDERER": 0.01,
+    "HARD_WORKER": 0.01,
+
+    "FLIRTY": 1.0,
+    "FRIENDLY": 1.0,
+    "OUTGOING": 1.0,
+    "INTROVERTED": 1.0,
+    "HUMOROUS": 1.0,
+    "SERIOUS": 1.0,
+
+    "LOVES_NATURE": 1.0,
+    "LOVES_ANIMALS": 1.0,
+    "GARDENER": 1.0,
+    "FARMER": 1.0,
+    "COOK": 1.0,
+    "BUILDER": 1.0,
+    "MINER": 1.0,
+    "ENGINEER": 1.0,
+    "REDSTONE_ENTHUSIAST": 1.0,
+
+    "ARTISTIC": 1.0,
+    "MUSICIAN": 1.0,
+    "STORYTELLER": 1.0,
+    "READER": 1.0,
+    "HISTORIAN": 1.0,
+
+    "EXPLORER": 1.0,
+    "ADVENTUROUS": 1.0,
+    "HOME_BODY": 1.0,
+    "TRAVELER": 1.0,
+
+    "COMMUNITY_MINDED": 1.0,
+    "HELPFUL": 1.0,
+    "TEACHER": 1.0,
+    "LEARNER": 1.0,
+    "LEADER": 1.0,
+    "ORGANIZER": 1.0,
+
+    "SPORTS_LOVER": 1.0,
+    "COMPETITIVE": 1.0,
+    "COLLABORATIVE": 1.0,
+
+    "TECHNOLOGY_LOVER": 1.0,
+    "MAGIC_LOVER": 1.0,
+    "SCIENCE_LOVER": 1.0,
+
+    "FOODIE": 1.0,
+    "DRINKS_ENTHUSIAST": 1.0,
+    "CRAFTSMAN": 1.0,
+    "COLLECTOR": 1.0
+  }
+}
