@@ -1,0 +1,26 @@
+{
+    "profession":{
+        "FARMER":{
+            "perc_traits":["GARDENER","FARMER"],
+            "skin":"FARMER",
+            "schedule":"NORMAL",
+            "actions":[{
+                "prioprity":1,
+                "type": "TRANSFORM",
+                "environment":["FENCEBOUNDARY"],
+                "tool":"hoe",
+                "input": {
+                    "block":"DIRT",
+                    "block_state":{},
+                    "items":[""]
+                },
+                "output": {
+                    "block": "FARMLAND",
+                    "block_state":{},
+                    "items":[""]
+                },
+                "animation": "SWING"
+            }]
+        }
+    }
+}

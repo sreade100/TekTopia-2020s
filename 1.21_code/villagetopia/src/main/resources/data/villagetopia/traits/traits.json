@@ -1,7 +1,9 @@
 {
   "traits": {
     "MURDERER": 0.01,
-    "HARD_WORKER": 0.01,
+    "HARD_WORKER": 0.1,
+    "BRAVE":0.1,
+    "COWARD":0.1,
 
     "FLIRTY": 1.0,
     "FRIENDLY": 1.0,
@@ -15,7 +17,6 @@
     "GARDENER": 1.0,
     "FARMER": 1.0,
     "COOK": 1.0,
-    "BUILDER": 1.0,
     "MINER": 1.0,
     "ENGINEER": 1.0,
     "REDSTONE_ENTHUSIAST": 1.0,
@@ -23,7 +24,7 @@
     "ARTISTIC": 1.0,
     "MUSICIAN": 1.0,
     "STORYTELLER": 1.0,
-    "READER": 1.0,
+    "BOOKWORM": 1.0,
     "HISTORIAN": 1.0,
 
     "EXPLORER": 1.0,
