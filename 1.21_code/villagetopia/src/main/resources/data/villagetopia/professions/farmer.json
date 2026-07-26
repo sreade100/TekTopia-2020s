@@ -6,6 +6,7 @@
             "schedule":"NORMAL",
             "actions":[{
                 "prioprity":1,
+                "skill_requirement": 1,
                 "type": "TRANSFORM",
                 "environment":["FENCEBOUNDARY"],
                 "tool":"hoe",

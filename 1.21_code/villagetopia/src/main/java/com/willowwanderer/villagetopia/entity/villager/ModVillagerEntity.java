@@ -323,12 +323,7 @@ public class ModVillagerEntity extends Villager {
         return professions[index];
     }
 
-    @Override
-    public void tick() {
-        super.tick();
-
-        if (this.level().isClientSide) return;
-
+    private void tickHunger() {
         this.hunger = this.hunger - 0.000139f; // starve in three days after full
 
         if (this.hunger < 0.0f){
@@ -338,6 +333,15 @@ public class ModVillagerEntity extends Villager {
             }
             this.hurt(this.damageSources().starve(),1.0f);
         }
+    }
+
+    @Override
+    public void tick() {
+        super.tick();
+
+        if (this.level().isClientSide) return;
+
+        tickHunger();
     }
 
     public static void broadcast(MinecraftServer server, String message) {

@@ -47,7 +47,7 @@ public class VillageEvents {
 
         Block placed = event.getPlacedBlock().getBlock();
         if (placed == VillageStone.CENTRAL_VILLAGE_STONE.get()) {
-            VillageStoneManager manager = getManager(level);
+            VillageStoneManager manager = getManager(level); //TODO: Add new manager if block placed too far from original block (i.e. create new manager)
             if (manager != null) {
                 manager.addStone(event.getPos());
             }
